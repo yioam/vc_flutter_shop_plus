@@ -50,7 +50,7 @@ class HomePage extends StatelessWidget {
               ),
               onRefresh: () async {
                 print('重新刷新');
-                _getContent(context);
+                _getContent4EasyRefresh(context);
               },
               onLoad: () async {
                 print('加载更多数据');
@@ -68,9 +68,16 @@ class HomePage extends StatelessWidget {
   }
 
   Future _getContent(BuildContext context) async {
-    print('homePage _getContent');
+    print('_getContent start');
     await Provider.of<HomeProvider>(context, listen: false).getContent();
-    print('homePage end');
+    print('_getContent end');
+    return '完成加载';
+  }
+
+  Future _getContent4EasyRefresh(BuildContext context) async {
+    print('_getContent4EasyRefresh start');
+    await Provider.of<HomeProvider>(context).getContent4EasyRefresh();
+    print('_getContent4EasyRefresh end');
     return '完成加载';
   }
 

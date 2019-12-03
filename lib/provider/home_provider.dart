@@ -11,17 +11,32 @@ class HomeProvider with ChangeNotifier {
   Content get content => _content;
 
   getContent() async{
-    print('111');
+    print('getContent start');
     var formData = {'lon': '115.02932', 'lat': '35.76189'};
     await request('homePageContent', formData: formData).then((val) {
       var respData = json.decode(val.toString());
       ContentRespModel contentRespModel = ContentRespModel.fromJson(respData);
       if (contentRespModel != null && contentRespModel.data != null) {
         _content = contentRespModel.data;
-        print('HomeProvider getContent');
         notifyListeners();
       }
     });
+    print('getContent end');
+  }
+
+  getContent4EasyRefresh() async{
+    print('getContent4EasyRefresh start');
+    var formData = {'lon': '115.02932', 'lat': '35.76189'};
+    await request('homePageContent', formData: formData).then((val) {
+      var respData = json.decode(val.toString());
+      ContentRespModel contentRespModel = ContentRespModel.fromJson(respData);
+      if (contentRespModel != null && contentRespModel.data != null) {
+        _content = contentRespModel.data;
+        //notifyListeners();
+      }
+    });
+    reset4EasyRefresh();
+    print('getContent4EasyRefresh end');
   }
 
   int _page = 0;
@@ -40,6 +55,13 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  reset4EasyRefresh() {
+    _page = 0;
+    _hotGoodsList = [];
+    _allHotGoodsList = [];
+    notifyListeners();
+  }
+
   getHotGoodsList({formData}) async {
     print('getHotGoodsList start');
     await request('homePageBelowConten', formData: formData).then((val) {
@@ -55,6 +77,7 @@ class HomeProvider with ChangeNotifier {
 
   getAllHotGoodsList(List<BelowConten> newList) {
     _allHotGoodsList.addAll(newList);
+    print('page: $_page, allHotGoodsList length:${_allHotGoodsList.length}');
     notifyListeners();
   }
 }
