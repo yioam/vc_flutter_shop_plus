@@ -52,7 +52,7 @@ class CategoryProvider with ChangeNotifier {
     _categoryId = id;
     _subId = ''; // 点击大类 把子类清空
 
-    _page = 1;
+    _page = 0;
 
     BxMallSubDto item = BxMallSubDto();
     item.mallSubId = '';
@@ -81,39 +81,48 @@ class CategoryProvider with ChangeNotifier {
     var data = {
       'categoryId': categoryId == null ? '4' : categoryId,
       'categorySubId': '',
-      'page': 0
+      'page': 0,
     };
 
-    request('getMallGoods', formData: data).then((val) {
+    print('getMallGoodsListByCgId data ${data.toString()}');
+
+    await request('getMallGoods', formData: data).then((val) {
       var respData = json.decode(val.toString());
       MallGoodsRespModel respModel = MallGoodsRespModel.fromJson(respData);
       if (respModel != null && respModel.data != null) {
         _mallGoodsList = respModel.data;
-        notifyListeners();
-        print('getMallGoodsListByCgId end');
+      } else {
+        _mallGoodsList = [];
       }
     });
+
+    notifyListeners();
+    print('getMallGoodsListByCgId end');
   }
 
-  getMallGoodsListByCgSubId({String categorySubId}) async {
+  getMallGoodsListByCgSubId() async {
     print('getMallGoodsListByCgSubId start');
+    _page = 0;
     var data = {
       'categoryId': _categoryId,
-      'categorySubId': categorySubId,
-      'page': 0
+      'categorySubId': _subId,
+      'page': _page,
     };
 
     print('getMallGoodsListByCgSubId data ${data.toString()}');
 
-    request('getMallGoods', formData: data).then((val) {
+    await request('getMallGoods', formData: data).then((val) {
       var respData = json.decode(val.toString());
       MallGoodsRespModel respModel = MallGoodsRespModel.fromJson(respData);
       if (respModel != null && respModel.data != null) {
         _mallGoodsList = respModel.data;
-        notifyListeners();
-        print('getMallGoodsListByCgSubId end');
+      } else {
+        _mallGoodsList = [];
       }
     });
+
+    notifyListeners();
+    print('getMallGoodsListByCgSubId end');
   }
 
   getMoreMallGoodsList() async {
@@ -125,7 +134,7 @@ class CategoryProvider with ChangeNotifier {
       'page': _page
     };
 
-    request('getMallGoods', formData: data).then((val) {
+    await request('getMallGoods', formData: data).then((val) {
       var respData = json.decode(val.toString());
       MallGoodsRespModel respModel = MallGoodsRespModel.fromJson(respData);
       print('getMoreMallGoodsList respModel data:${respModel.data}');
@@ -136,6 +145,5 @@ class CategoryProvider with ChangeNotifier {
     });
 
     print('getMoreMallGoodsList end; page:$_page, size: ${_mallGoodsList.length}');
-
   }
 }

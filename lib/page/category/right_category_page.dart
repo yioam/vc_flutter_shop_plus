@@ -31,7 +31,7 @@ class RightCategoryPage extends StatelessWidget {
     return InkWell(
       onTap: () {
         categoryProvider.changeChildIndex(index, item.mallSubId);
-        categoryProvider.getMallGoodsListByCgSubId(categorySubId: item.mallSubId);
+        categoryProvider.getMallGoodsListByCgSubId();
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),

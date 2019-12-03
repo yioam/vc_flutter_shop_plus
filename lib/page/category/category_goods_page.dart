@@ -2,6 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_footer.dart';
+import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:vc_flutter_shop_plus/model/mall_goods_model.dart';
@@ -14,23 +15,32 @@ class CategoryGoodsPage extends StatelessWidget {
     print('CategoryGoodsPage 000');
     CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context);
     List<MallGoods> mallGoodsList = categoryProvider.mallGoodsList;
-    return Expanded(
-      child: Container(
-        width: ScreenUtil().setWidth(570),
-        child: EasyRefresh(
-          footer: MaterialFooter(),
-          child: ListView.builder(
-              itemCount: mallGoodsList.length,
-              itemBuilder: (context, index) {
-                return _listWidget(context, mallGoodsList, index);
-              }),
-          onLoad: () async {
-            print('CategoryGoodsPage 加载更多数据');
-            categoryProvider.getMoreMallGoodsList();
-          },
+    if (mallGoodsList.length > 0) {
+      return Expanded(
+        child: Container(
+          width: ScreenUtil().setWidth(570),
+          child: EasyRefresh(
+            header: MaterialHeader(),
+            footer: MaterialFooter(),
+            child: ListView.builder(
+                itemCount: mallGoodsList.length,
+                itemBuilder: (context, index) {
+                  return _listWidget(context, mallGoodsList, index);
+                }),
+            onRefresh: () async {
+              print('重新刷新');
+              categoryProvider.getMallGoodsListByCgSubId();
+            },
+            onLoad: () async {
+              print('CategoryGoodsPage 加载更多数据');
+              categoryProvider.getMoreMallGoodsList();
+            },
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Text('暂时没有数据');
+    }
   }
 
   Widget _listWidget(BuildContext context, List<MallGoods> list, int index) {
