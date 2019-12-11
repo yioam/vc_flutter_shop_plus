@@ -30,8 +30,8 @@ class HomePage extends StatelessWidget {
           print('HomePage 222');
           if (snapshot.hasData) {
             return EasyRefresh(
-              header: MaterialHeader(),
-              footer: MaterialFooter(),
+              header: MaterialHeader(enableHapticFeedback: true),
+              footer: MaterialFooter(enableHapticFeedback: true, enableInfiniteLoad: false),
               child: ListView(
                 children: <Widget>[
                   SwiperDiyPage(),

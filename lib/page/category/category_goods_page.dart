@@ -20,8 +20,8 @@ class CategoryGoodsPage extends StatelessWidget {
         child: Container(
           width: ScreenUtil().setWidth(570),
           child: EasyRefresh(
-            header: MaterialHeader(),
-            footer: MaterialFooter(),
+            header: MaterialHeader(enableHapticFeedback: true),
+            footer: MaterialFooter(enableHapticFeedback: true, enableInfiniteLoad: false),
             child: ListView.builder(
                 itemCount: mallGoodsList.length,
                 itemBuilder: (context, index) {
